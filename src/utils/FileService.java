@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class FileService {
-    private static final String DATA_DIRECTORY_PATH = "src/CW_dataset/train-unsup";
+    private static final String DATA_DIRECTORY_PATH = "src/CW_dataset/dataset";
 
     public static Queue<File> getFilesFromDataDirectory() {
         File directoryPath = new File(DATA_DIRECTORY_PATH);
