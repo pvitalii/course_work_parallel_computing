@@ -1,45 +1,25 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import utils.FileService;
+
 import java.util.*;
+import java.io.File;
 
 public class Indexer implements Runnable {
 
     private final Dictionary dictionary;
-    private final int threadIndex;
-    Indexer(Dictionary d, int threadIndex){
+    private final Queue<File> fileQueue;
+
+    Indexer(Dictionary d, Queue<File> fQ){
         this.dictionary = d;
-        this.threadIndex = threadIndex;
+        this.fileQueue = fQ;
     }
 
     public void run() {
-        File directoryPath = new File("src/CW_dataset/train-unsup");
-        File[] filesList = directoryPath.listFiles();
-        assert filesList != null;
-        int filesByThread = filesList.length/Main.THREADS_NUM;
-        int firstIndex = filesByThread * threadIndex;
-        int lastIndex = (filesByThread * threadIndex) + filesByThread;
-
-        for(int i = firstIndex; i < lastIndex; i++) {
-            List<String> fileData = readFile(filesList[i].getPath());
-            parseFileDataIntoDictionary(fileData, filesList[i].getName());
+        File file = fileQueue.poll();
+        while (file != null) {
+            List<String> fileData = FileService.readFile(file.getPath());
+            parseFileDataIntoDictionary(fileData, file.getName());
+            file = fileQueue.poll();
         }
-    }
-
-    private List<String> readFile(String filePath) {
-        List<String> fileLines = new ArrayList<>();
-        try {
-            File myObj = new File(filePath);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                fileLines.add(myReader.nextLine());
-            }
-            myReader.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        return fileLines;
     }
 
     private void parseFileDataIntoDictionary(List<String> fileData, String docId) {
