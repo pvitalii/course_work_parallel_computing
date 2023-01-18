@@ -37,7 +37,7 @@ public class Indexer implements Runnable {
     }
 
     private String cleanToken(String tokens){
-        tokens = tokens.replaceAll("[,.()/\"]", " ");
+        tokens = tokens.replaceAll("[,.()/\"-]", " ");
         return tokens;
     }
 }
