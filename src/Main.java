@@ -12,9 +12,16 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    public static int THREADS_NUM = 5;
-
     public static void main(String[] args) {
+        System.out.println("Enter the number of threads: ");
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(System.in));
+        Integer THREADS_NUM = null;
+        try {
+            THREADS_NUM = Integer.parseInt(reader.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Dictionary dictionary = new Dictionary();
         Queue<File> fileQueue = FileService.getFilesFromDataDirectory();
         ExecutorService es = Executors.newFixedThreadPool(THREADS_NUM);
@@ -32,8 +39,6 @@ public class Main {
         BenchmarkService.stopTimer();
         System.out.println("Wasted time on indexing: " + BenchmarkService.getProcessingFileTime() + " milliseconds");
         System.out.println("Enter the term you wanna find in index: ");
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(System.in));
         String token = null;
         try {
             token = reader.readLine();
